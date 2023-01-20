@@ -27,6 +27,23 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/index.html"));
 });
 
+function createNote (body, noteArray) {
+    const newNote = body;
+
+    body.id = noteArray[0];
+    noteArray[0]++;
+    noteArray.push(newNote);
+    fs.writeFileSync(path.join(__dirname, "./db/db.json"),
+    JSON.stringify(noteArray, null, 0)
+    );
+    return newNote;
+}
+
+app.post("/api/notes", (req, res) => {
+    const newNote = createNote(req.body, notesData);
+    res.json(newNote);
+});
+
 app.listen(PORT, () => {
     console.log(`SERVER LISTENIING ON PORT: ${PORT}`);
 });
